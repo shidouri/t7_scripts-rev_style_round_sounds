@@ -1,0 +1,121 @@
+Revelations Style Round Sounds
+By Shidouri
+
+
+Step 1:
+Drag and drop all folders except usermaps and stock_csv to BO3 root. 
+
+Drop the CONTENTS of YOURMAP into BO3 root/usermaps/YOURMAP.
+
+
+
+
+
+Step 2:
+Add the following to your zone, above scriptparsetree,scripts/zm/YOURMAP.gsc:
+
+scriptparsetree,scripts/zm/zm_zone_specific_round_sounds.gsc
+
+
+
+
+
+
+Step 3:
+Add the follwing to YOURMAP.gsc, underneath #using scripts\zm\_zm_trap_electric:
+
+// Revelations-style Zone-Specific Round Sounds
+#using scripts\zm\zm_zone_specific_round_sounds;
+
+
+
+
+
+
+Step 4:
+Open BO3 root/usermaps/YOURMAP/sound/zoneconfig/YOURMAP.szc
+Directly underneath this:
+{
+ "Type" : "ALIAS",
+ "Name" : "user_aliases",
+ "Filename" : "user_aliases.csv",
+ "Specs" : [ ] 
+},
+
+Add this:
+{
+ "Type" : "ALIAS",
+ "Name" : "rev_style_rounds",
+ "Filename" : "rev_style_rounds.csv",
+ "Specs" : [ ] 
+},
+
+
+NOTE: If you need help with steps 5 and 6, I've written a tool to help you with adding sounds for this step,
+so long as all sounds for each zone are in one folder (or all sounds in total in one folder).
+https://github.com/shidouri/ShiddyZoneMusicTool/releases 			  -- EXE
+https://github.com/shidouri/ShiddyZoneMusicTool/blob/main/ShiddyZoneMusicTool.py  -- python source script
+
+
+Step 5:
+
+Go to BO3 root/share/raw/sound/aliases and open rev_style_rounds.csv.
+Do not edit lines 1 through 16.
+Here is where you'll define aliases for each sound.
+
+For example:
+rsrs_zone1_start1,,,rev_style_rounds\default\ritual_start1.wav,,,UIN_MOD,,,,,BUS_MUSIC,grp_music,,,,,100,100,,,,,,,,,,,,,,100,100,0,1,,2d,music_all,,NONLOOPING,,,,,,,,,,,,,,,,,,,,,,,yes,,,,yes,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+
+"rsrs_zone1_start1" is the sound alias we will use in the GSC in Step 6.
+"rev_style_rounds\default\ritual_start1.wav" is the path to the WAV file we want to use in BO3 root/sound_assets/.
+
+
+
+
+
+
+Step 6:
+We're now going to assign the aliases you just set up, to zones in the game.
+Go to BO3 root/usermaps/YOURMAP/scripts/zm/zm_zone_specific_round_sounds.gsc and open it.
+Go to line 28 and have a read through to make sure you understand.
+
+FORMAT: 
+	level.a_location_round_sound_begin["ZONENAME"] = array("zone1Alias1", "zone1Alias2", "zone1Alias3" [etc]); [NO COMMA ON LAST!]
+	level.a_location_round_sound_end["ZONENAME"] = array("zone1Alias1", "zone1Alias2", "zone1Alias3" [etc]); [NO COMMA ON LAST!]
+
+ie.     level.a_location_round_sound_begin["start_zone"] = array("soe_roundstart_1", "soe_roundstart_2", "soe_roundstart_3", "soe_roundstart_4");
+	level.a_location_round_sound_end["start_zone"] = array("soe_roundend_1", "soe_roundend_2");
+
+You must set up at least 1 sound for start and end for each zone, otherwise the classic round sounds will be used instead.
+
+If multiple zones are going to use one set of sounds (such as multiple zones for one area):
+Assign the first zone it's sounds, and then assign the first zone's array as the value of the others.
+
+For example:
+	level.a_location_round_sound_begin["start_zone"] = array("soe_roundstart_1", "soe_roundstart_2", "soe_roundstart_3", "soe_roundstart_4");
+	level.a_location_round_sound_begin["zone_3"] = level.a_location_round_sound_begin["start_zone"]
+
+	level.a_location_round_sound_end["start_zone"] = array("soe_roundend_1", "soe_roundend_2", "soe_roundend_3", "soe_roundend_4");
+	level.a_location_round_sound_end["zone_3"] = level.a_location_round_sound_end["start_zone"]
+
+
+Step 7: 
+Save everything and compile and link but DON'T run.
+snd_convert can be very picky sometimes with new sounds so check for any errors in the linker.
+So if you're sure you set everything up correctly, keep trying to link until the errors resolve themselves. Then run and test it out :)
+
+
+If the earlier rounds are using sounds that are too long for you:
+In zm_zone_specific_round_sounds.gsc find the #define for SHORT_SOUND_MAX_TIME and lower it from 25 to 15 maybe.
+
+
+The default setup for the sounds are a mixture of both Custom Round Sounds Packs by 777TONES on DEVRAW.
+If you like the ones I included, you should check out the ones I didn't! Both packs have some great custom sounds!
+https://www.devraw.net/releases/custom-round-sounds---pack-1
+https://www.devraw.net/releases/custom-round-sounds-pack-2
+
+
+Please credit myself and 777TONES if you use this in your map.
+
+Cheers! - Shidouri
+
